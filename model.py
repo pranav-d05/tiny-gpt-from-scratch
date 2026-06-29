@@ -479,8 +479,15 @@ def log_prob_of_pair(p_matrix, current_id, next_id):
 
     return array_log(ele)
 
-# Step 55 - sum_negative_log_probs (not yet solved)
-# TODO: implement
+# Step 55 - sum_negative_log_probs
+def sum_negative_log_probs(p_matrix, data):
+    # TODO: sum the negative log probabilities of all consecutive bigrams in data
+    total = 0.0
+
+    for i in range(len(data) - 1):
+        total -= log_prob_of_pair(p_matrix, data[i], data[i + 1])
+
+    return float(total)
 
 # Step 56 - average_nll (not yet solved)
 # TODO: implement
