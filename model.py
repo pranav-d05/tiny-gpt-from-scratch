@@ -700,8 +700,13 @@ def linear_forward(x, w):
         'cache':{'x':x,'w':w}
     }
 
-# Step 75 - derive_dx_on_paper (not yet solved)
-# TODO: implement
+# Step 75 - derive_dx_on_paper
+def derive_dx_on_paper():
+    """Return notes deriving dL/dX = dY @ W.T for Y = X @ W."""
+    return """Y = X @ W
+dL/dX = dY @ W.T
+shapes: X (B, In), W (In, Out), dY (B, Out) -> dL/dX (B, In)
+"""
 
 # Step 76 - derive_linear_dw_on_paper (not yet solved)
 # TODO: implement
