@@ -613,8 +613,14 @@ def derive_dw_on_paper():
 # Step 69 - compute_dw_scatter_add (not yet solved)
 # TODO: implement
 
-# Step 70 - sgd_update_w (not yet solved)
-# TODO: implement
+# Step 70 - sgd_update_w
+import numpy as np
+
+def sgd_update_w(w, dw, learning_rate):
+    """Apply one SGD step: return w - learning_rate * dw as a new array."""
+    # TODO: subtract the scaled gradient from the weights and return the new matrix
+    new = w - learning_rate*dw 
+    return new
 
 # Step 71 - run_one_training_step (not yet solved)
 # TODO: implement
