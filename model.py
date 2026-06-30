@@ -627,8 +627,34 @@ def sgd_update_w(w, dw, learning_rate):
     new = w - learning_rate*dw 
     return new
 
-# Step 71 - run_one_training_step (not yet solved)
-# TODO: implement
+# Step 71 - run_one_training_step
+def softmax(score):
+    e_x = np.exp(score - np.max(score, axis=1, keepdims=True))
+    return e_x / np.sum(e_x, axis=1, keepdims=True)
+
+
+def run_one_training_step(w, ids, targets, learning_rate):
+    logits = w[ids]
+    probs = softmax(logits)
+
+    correct_probs = probs[np.arange(len(targets)), targets]
+    loss = -np.mean(np.log(correct_probs + 1e-12))
+
+    num_classes = w.shape[1]
+    ohe = np.zeros((len(targets), num_classes))
+    ohe[np.arange(len(targets)), targets] = 1
+
+    dz = (probs - ohe) / len(targets)
+
+    dw = np.zeros_like(w)
+    np.add.at(dw, ids, dz)
+
+    w_new = w - learning_rate * dw
+
+    return {
+        "w": w_new,
+        "loss": loss,
+    }
 
 # Step 72 - train_neural_bigram_loop (not yet solved)
 # TODO: implement
