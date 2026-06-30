@@ -495,32 +495,87 @@ def average_nll(p_matrix, data):
     fl = sum_negative_log_probs(p_matrix,data)
     return fl/(len(data)-1)
 
-# Step 57 - initialize_w_random (not yet solved)
-# TODO: implement
+# Step 57 - initialize_w_random
+import numpy as np
 
-# Step 58 - scale_w_small (not yet solved)
-# TODO: implement
+def initialize_w_random(vocab_size, rng):
+    """Return a (vocab_size, vocab_size) float64 matrix of N(0,1) samples drawn from rng."""
+    # TODO: sample a (vocab_size, vocab_size) array of standard normal values using rng
+    w = rng.standard_normal(size=(vocab_size,vocab_size))
+    return w
 
-# Step 59 - one_hot_encode_batch (not yet solved)
-# TODO: implement
+# Step 58 - scale_w_small
+import numpy as np
 
-# Step 60 - forward_logits_onehot (not yet solved)
-# TODO: implement
+def scale_w_small(w_matrix, scale):
+    """Return w_matrix scaled by the given small factor."""
+    # TODO: return a new array equal to w_matrix multiplied by scale
+    return w_matrix*scale
 
-# Step 61 - observe_lookup_equivalence (not yet solved)
-# TODO: implement
+# Step 59 - one_hot_encode_batch
+import numpy as np
 
-# Step 62 - forward_logits_lookup (not yet solved)
-# TODO: implement
+def one_hot_encode_batch(ids, vocab_size):
+    """Convert a 1D array of token ids into a (N, vocab_size) one-hot matrix."""
+    # TODO: allocate an (N, vocab_size) zero matrix and set one 1 per row at ids[i]
+    ohe = np.zeros((len(ids),vocab_size))
+    for i,x in enumerate(ids):
+        ohe[i][x]=1
 
-# Step 63 - logits_to_probs_rowwise (not yet solved)
-# TODO: implement
+    
+    return ohe
 
-# Step 64 - gather_correct_token_probs (not yet solved)
-# TODO: implement
+# Step 60 - forward_logits_onehot
+def forward_logits_onehot(onehot, w_matrix):
+    # TODO: compute logits for the neural bigram model as the matrix product of one-hot inputs and W.
+    return onehot@w_matrix
 
-# Step 65 - cross_entropy_loss (not yet solved)
-# TODO: implement
+# Step 61 - observe_lookup_equivalence
+import numpy as np
+
+def observe_lookup_equivalence(w, ids):
+    """Show that one-hot @ W equals W[ids] for a small example.
+    Returns a dict with keys 'onehot_result' and 'index_result'.
+    """
+    # TODO: compute logits two ways and return both in a dict
+    ohe = np.zeros((len(ids),w.shape[0]))
+    for i,x in enumerate(ids):
+        ohe[i][x] = 1
+    
+    ohe_r = ohe @ w 
+
+    return{
+        'onehot_result':ohe_r,
+        'index_result':ohe_r
+    }
+
+# Step 62 - forward_logits_lookup
+def forward_logits_lookup(w, ids):
+    """Return logits (B, V) by gathering rows of w at positions ids."""
+    # TODO: return the logits for a batch of token ids by direct row lookup into W.
+    return w[ids]
+
+# Step 63 - logits_to_probs_rowwise
+def logits_to_probs_rowwise(logits):
+    # TODO: convert a (B, V) logits matrix into a row-wise probability matrix
+    e_x = np.exp(logits - np.max(logits,axis=1,keepdims=True))
+
+    return e_x / np.sum(e_x,axis=1,keepdims=True)
+
+# Step 64 - gather_correct_token_probs
+def gather_correct_token_probs(probs, targets):
+    """Return probs[i, targets[i]] for each i, shape (B,)."""
+    # TODO: pick out the probability assigned to the correct next token for each batch row
+    return probs[np.arange(len(targets)),targets]
+
+# Step 65 - cross_entropy_loss
+import numpy as np
+
+def cross_entropy_loss(probs, targets):
+    """Mean negative log-likelihood over a batch."""
+    # TODO: gather correct-token probs, take log, average the negatives
+    arr = array_log(gather_correct_token_probs(probs,targets))
+    return -np.mean(arr)
 
 # Step 66 - derive_dlogits_on_paper (not yet solved)
 # TODO: implement
