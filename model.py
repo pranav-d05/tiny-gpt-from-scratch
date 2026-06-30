@@ -847,8 +847,30 @@ def layernorm_backward_divide_std(dy, cache):
     # TODO: propagate the upstream gradient through the divide-by-std step of LayerNorm
     return dy / np.sqrt(cache['var']+cache['eps'])
 
-# Step 90 - layernorm_backward_full (not yet solved)
-# TODO: implement
+# Step 90 - layernorm_backward_full
+def layernorm_backward_full(dy, cache):
+
+    dbeta = np.sum(dy, axis=0)
+
+    dgamma = np.sum(dy * cache["x_hat"], axis=0)
+
+    dx_hat = dy * cache["gamma"]
+
+    dx = (
+        dx_hat
+        - np.mean(dx_hat, axis=1, keepdims=True)
+        - cache["x_hat"] * np.mean(
+            dx_hat * cache["x_hat"],
+            axis=1,
+            keepdims=True
+        )
+    ) / np.sqrt(cache["var"] + cache["eps"])
+
+    return {
+        "dx": dx,
+        "dgamma": dgamma,
+        "dbeta": dbeta
+    }
 
 # Step 91 - layernorm_backward_implementation (not yet solved)
 # TODO: implement
