@@ -1031,8 +1031,13 @@ def build_causal_mask(seq_len):
     mask = np.tril(mask)
     return mask
 
-# Step 106 - apply_causal_mask (not yet solved)
-# TODO: implement
+# Step 106 - apply_causal_mask
+import numpy as np
+
+def apply_causal_mask(scaled_scores, causal_mask):
+    """Replace future positions in scaled_scores with -inf using causal_mask."""
+    # TODO: return a (B,T,T) array where positions with causal_mask False are -inf...
+    return np.where(causal_mask, scaled_scores, float('-inf'))
 
 # Step 107 - softmax_attention_weights (not yet solved)
 # TODO: implement
